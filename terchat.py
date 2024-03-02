@@ -1,25 +1,10 @@
-# File: /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyrebase/pyrebase.py
-
-import collections
-
-try:
-    # Python 3.3 and later
-    from collections.abc import MutableMapping
-except ImportError:
-    # Python 2.7
-    from collections import MutableMapping
-
-# ... rest of the existing code remains unchanged
-
-
-# File: terchat.py
-
 import threading
 import time
 import pyrebase
 import random
 from datetime import datetime
-import uuid
+from termcolor import colored
+import uuid  # Import the uuid module for generating unique user IDs
 
 # Firebase configuration
 firebase_config = {
@@ -31,7 +16,6 @@ firebase_config = {
     "messagingSenderId": "805002553191",
     "appId": "1:805002553191:web:758e4970dd57a6e6ebb1c2"
 }
-
 try:
     firebase = pyrebase.initialize_app(firebase_config)
 except Exception as e:
@@ -46,7 +30,7 @@ class ChatApp:
         self.messages_ref = db.child("messages")
         self.stream_thread = threading.Thread(target=self.start_stream)
         self.stream_thread.start()
-        self.last_message_key = None
+        self.last_message_key = None  # Keep track of the last processed message key
 
     def start_stream(self):
         def on_message_change(message):
@@ -67,6 +51,7 @@ class ChatApp:
 
     def send_message(self, message):
         if not message:
+            # If no message is entered, send a placeholder message with the user's ID
             message = f"No message entered - User ID: {self.username}"
 
         if self.username:
@@ -84,17 +69,19 @@ class ChatApp:
         formatted_timestamp = date_time_obj.strftime("%Y-%m-%d %I:%M %p")
 
         avatar = self.get_random_avatar()
-        formatted_message = f"{formatted_timestamp} - {username} - {message}"
+        formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message}"
         return f"{avatar}\n{formatted_message}"
 
     def display_message(self, formatted_message):
+        # Cool message animation
         for i in range(3):
             print(".", end=" ", flush=True)
             time.sleep(0.5)
         print("\n")
 
-        print(formatted_message)
-        self.input_prompt()
+        # Print the formatted message
+        print(colored(formatted_message, "yellow"))
+        self.input_prompt()  # Display input prompt after sending a message
 
     def get_random_avatar(self):
         avatars = [
@@ -120,16 +107,35 @@ class ChatApp:
                     \  /
                      \/
             '''
+            # Add more avatars as needed
         ]
 
         return random.choice(avatars)
 
 if __name__ == "__main__":
-    banner = "Welcome to Terchat - Your Terminal Chat App\n"
+    # Display random ASCII banner
+    random_banners = [
+        """
+        ┏━━━━┳━━━┳━━━┳━━━┳┓╋┏┳━━━┳━━━━┓
+        ┃┏┓┏┓┃┏━━┫┏━┓┃┏━┓┃┃╋┃┃┏━┓┃┏┓┏┓┃
+        ┗┛┃┃┗┫┗━━┫┗━┛┃┃╋┗┫┗━┛┃┃╋┃┣┛┃┃┗┛
+        ╋╋┃┃╋┃┏━━┫┏┓┏┫┃╋┏┫┏━┓┃┗━┛┃╋┃┃
+        ╋╋┃┃╋┃┗━━┫┃┃┗┫┗━┛┃┃╋┃┃┏━┓┃╋┃┃
+        ╋╋┗┛╋┗━━━┻┛┗━┻━━━┻┛╋┗┻┛╋┗┛╋┗┛
+        """,
+        # Add more banners as needed
+    ]
+
+    banner = random.choice(random_banners)
     print(banner)
 
     app = ChatApp()
+
+    # Generate a unique user ID using uuid
     app.username = str(uuid.uuid4())
+
+    # Display tool name
+    print(colored("Welcome to Terchat - Your Terminal Chat App\n", "cyan"))
 
     try:
         while True:
