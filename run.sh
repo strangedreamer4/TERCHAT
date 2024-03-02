@@ -20,9 +20,6 @@ if ! [ -x "$(command -v git)" ]; then
   echo "Installing Git..."
   pkg install git -y
 fi
-
-# Define variables
-REPO_URL="https://github.com/strangedreamer4/TERCHAT.git"
 SCRIPT_NAME="terchat.py"
 VENV_DIR="terchat_venv"
 
