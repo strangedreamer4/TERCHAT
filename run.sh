@@ -3,7 +3,7 @@
 # Check if Python is installed
 if ! [ -x "$(command -v python3)" ]; then
   echo "Python not found. Please install Python and run the script again."
-  exit 1
+  
 fi
 
 # System update and Python installation
