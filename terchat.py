@@ -62,7 +62,7 @@ class ChatApp:
                 print(f"Error sending message to Firebase: {e}")
 
     def input_prompt(self):
-        print("Enter your message (press Ctrl+C to exit): ", end="", flush=True)
+        print("Enter your message (type 'q' to exit) ", end="", flush=True)
 
     def format_message(self, timestamp, username, message):
         date_time_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
