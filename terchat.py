@@ -141,7 +141,14 @@ if __name__ == "__main__":
         while True:
             app.input_prompt()
             message = input()
-            app.send_message(message)
+            if message.lower() == 'q':
+                confirm_exit = input("Do you want to exit? (y/n): ")
+                if confirm_exit.lower() == 'y':
+                    app.stream.close()
+                    print("Exiting the chat app.")
+                    break
+            else:
+                app.send_message(message)
     except KeyboardInterrupt:
         app.stream.close()
         print("Terminating the chat app.")
