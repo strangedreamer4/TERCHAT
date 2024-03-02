@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define variables
-REPO_URL="https://github.com/your-username/your-repo.git"
+REPO_URL="https://github.com/strangedreamer4/TERCHAT.git"
 SCRIPT_NAME="terchat.py"
 VENV_DIR="terchat_venv"
 
