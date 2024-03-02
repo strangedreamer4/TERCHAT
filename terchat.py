@@ -1,3 +1,19 @@
+# File: /data/data/com.termux/files/usr/lib/python3.11/site-packages/pyrebase/pyrebase.py
+
+import collections
+
+try:
+    # Python 3.3 and later
+    from collections.abc import MutableMapping
+except ImportError:
+    # Python 2.7
+    from collections import MutableMapping
+
+# ... rest of the existing code remains unchanged
+
+
+# File: terchat.py
+
 import threading
 import time
 import pyrebase
