@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Check if Python is installed
+if ! [ -x "$(command -v python3)" ]; then
+  echo "Python not found. Please install Python and run the script again."
+  exit 1
+fi
+
+# System update and Python installation
+echo "Updating system and installing Python..."
+apt update -y
+apt upgrade -y
+pkg install python -y
+pkg install python2 -y
+pkg install python3 -y
+clear
+
+# Install Git (if not installed)
+if ! [ -x "$(command -v git)" ]; then
+  echo "Installing Git..."
+  pkg install git -y
+fi
+
 # Define variables
 REPO_URL="https://github.com/strangedreamer4/TERCHAT.git"
 SCRIPT_NAME="terchat.py"
