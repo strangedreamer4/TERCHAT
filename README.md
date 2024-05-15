@@ -1,3 +1,4 @@
 # TERCHAT
 
-if you run terchat now you can run both kali & windows too get download 
+* Now you can run Terchat on both kali & windows \\too get download Release PC-terchat[v4] \\
+  
