@@ -42,9 +42,8 @@ class ChatApp:
                     username = data.get("username", "")
                     message_text = data.get("message", "")
                     timestamp = data.get("timestamp", "")
-                    ip = data.get("ip", "")  # Get the IP address from the message data
                     if username and message_text:
-                        formatted_message = self.format_message(timestamp, username, message_text, ip)
+                        formatted_message = self.format_message(timestamp, username, message_text)
                         self.display_message(formatted_message)
 
         try:
@@ -68,12 +67,12 @@ class ChatApp:
     def input_prompt(self):
         print("Enter your message (type 'q' to exit) ", end="", flush=True)
 
-    def format_message(self, timestamp, username, message, ip):
+    def format_message(self, timestamp, username, message):
         date_time_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
         formatted_timestamp = date_time_obj.strftime("%Y-%m-%d %I:%M %p")
 
         avatar = self.get_random_avatar()
-        formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message} - {colored('IP:', 'red')} {ip}"
+        formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message}"
         return f"{avatar}\n{formatted_message}"
 
     def display_message(self, formatted_message):
