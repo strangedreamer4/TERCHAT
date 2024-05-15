@@ -4,7 +4,8 @@ import pyrebase
 import random
 from datetime import datetime
 from termcolor import colored
-import uuid  # Import the uuid module for generating unique user IDs
+import uuid
+import requests  # Import requests module to fetch IP address
 
 # Firebase configuration
 firebase_config = {
@@ -16,6 +17,7 @@ firebase_config = {
     "messagingSenderId": "805002553191",
     "appId": "1:805002553191:web:758e4970dd57a6e6ebb1c2"
 }
+
 try:
     firebase = pyrebase.initialize_app(firebase_config)
 except Exception as e:
@@ -40,8 +42,9 @@ class ChatApp:
                     username = data.get("username", "")
                     message_text = data.get("message", "")
                     timestamp = data.get("timestamp", "")
+                    ip = data.get("ip", "")  # Get the IP address from the message data
                     if username and message_text:
-                        formatted_message = self.format_message(timestamp, username, message_text)
+                        formatted_message = self.format_message(timestamp, username, message_text, ip)
                         self.display_message(formatted_message)
 
         try:
@@ -56,20 +59,21 @@ class ChatApp:
 
         if self.username:
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+            ip = self.get_ip_address()  # Fetch the user's IP address
             try:
-                db.child("messages").push({"username": self.username, "message": message, "timestamp": timestamp})
+                db.child("messages").push({"username": self.username, "message": message, "timestamp": timestamp, "ip": ip})
             except Exception as e:
                 print(f"Error sending message to Firebase: {e}")
 
     def input_prompt(self):
         print("Enter your message (type 'q' to exit) ", end="", flush=True)
 
-    def format_message(self, timestamp, username, message):
+    def format_message(self, timestamp, username, message, ip):
         date_time_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
         formatted_timestamp = date_time_obj.strftime("%Y-%m-%d %I:%M %p")
 
         avatar = self.get_random_avatar()
-        formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message}"
+        formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message} - {colored('IP:', 'red')} {ip}"
         return f"{avatar}\n{formatted_message}"
 
     def display_message(self, formatted_message):
@@ -111,6 +115,15 @@ class ChatApp:
         ]
 
         return random.choice(avatars)
+
+    def get_ip_address(self):
+        try:
+            response = requests.get('https://api.ipify.org?format=json')
+            ip_data = response.json()
+            return ip_data['ip']
+        except requests.RequestException as e:
+            print(f"Error fetching IP address: {e}")
+            return "N/A"
 
 if __name__ == "__main__":
     # Display random ASCII banner
