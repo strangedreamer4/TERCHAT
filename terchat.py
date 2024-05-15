@@ -32,7 +32,7 @@ class ChatApp:
         self.messages_ref = db.child("messages")
         self.stream_thread = threading.Thread(target=self.start_stream)
         self.stream_thread.start()
-        self.last_message_key = None  # Keep track of the last processed message key
+        self.last_message_key = None
 
     def start_stream(self):
         def on_message_change(message):
@@ -53,12 +53,11 @@ class ChatApp:
 
     def send_message(self, message):
         if not message:
-            # If no message is entered, send a placeholder message with the user's ID
             message = f"No message entered - User ID: {self.username}"
 
         if self.username:
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-            ip = self.get_ip_address()  # Fetch the user's IP address
+            ip = self.get_ip_address()
             try:
                 db.child("messages").push({"username": self.username, "message": message, "timestamp": timestamp, "ip": ip})
             except Exception as e:
@@ -70,21 +69,17 @@ class ChatApp:
     def format_message(self, timestamp, username, message):
         date_time_obj = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S")
         formatted_timestamp = date_time_obj.strftime("%Y-%m-%d %I:%M %p")
-
         avatar = self.get_random_avatar()
         formatted_message = f"{formatted_timestamp} - {colored(username, 'green')} - {message}"
         return f"{avatar}\n{formatted_message}"
 
     def display_message(self, formatted_message):
-        # Cool message animation
         for i in range(3):
             print(".", end=" ", flush=True)
             time.sleep(0.5)
         print("\n")
-
-        # Print the formatted message
         print(colored(formatted_message, "yellow"))
-        self.input_prompt()  # Display input prompt after sending a message
+        self.input_prompt()
 
     def get_random_avatar(self):
         avatars = [
@@ -110,9 +105,7 @@ class ChatApp:
                     \  /
                      \/
             '''
-            # Add more avatars as needed
         ]
-
         return random.choice(avatars)
 
     def get_ip_address(self):
@@ -125,7 +118,6 @@ class ChatApp:
             return "N/A"
 
 if __name__ == "__main__":
-    # Display random ASCII banner
     random_banners = [
         """
         ┏━━━━┳━━━┳━━━┳━━━┳┓╋┏┳━━━┳━━━━┓
@@ -134,21 +126,13 @@ if __name__ == "__main__":
         ╋╋┃┃╋┃┏━━┫┏┓┏┫┃╋┏┫┏━┓┃┗━┛┃╋┃┃
         ╋╋┃┃╋┃┗━━┫┃┃┗┫┗━┛┃┃╋┃┃┏━┓┃╋┃┃
         ╋╋┗┛╋┗━━━┻┛┗━┻━━━┻┛╋┗┻┛╋┗┛╋┗┛
-        """,
-        # Add more banners as needed
+        """
     ]
-
     banner = random.choice(random_banners)
     print(banner)
-
     app = ChatApp()
-
-    # Generate a unique user ID using uuid
     app.username = str(uuid.uuid4())
-
-    # Display tool name
     print(colored("Welcome to Terchat - Your Terminal Chat App\n", "cyan"))
-
     try:
         while True:
             app.input_prompt()
